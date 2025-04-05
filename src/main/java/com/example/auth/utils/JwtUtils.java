@@ -2,28 +2,47 @@ package com.example.auth.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 
+@Component
 public class JwtUtils {
 
-    // Use a properly sized key - this is just an example, don't use this in production!
-    private static final String SECRET_KEY_STRING = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    private static String secretKeyString;
+    private static long accessTokenExpirationMs;
+    private static long refreshTokenExpirationMs;
 
-    // Convert the hex-encoded string to a proper SecretKey
-    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(
-            Decoders.BASE64.decode(SECRET_KEY_STRING)
-    );
+    @Value("${app.jwt.secret}")
+    public void setSecretKeyString(String secret) {
+        JwtUtils.secretKeyString = secret;
+    }
+
+    @Value("${app.jwt.accessTokenExpirationMs}")
+    public void setAccessTokenExpirationMs(long accessTokenExpirationMs) {
+        JwtUtils.accessTokenExpirationMs = accessTokenExpirationMs;
+    }
+
+    @Value("${app.jwt.refreshTokenExpirationMs}")
+    public void setRefreshTokenExpirationMs(long refreshTokenExpirationMs) {
+        JwtUtils.refreshTokenExpirationMs = refreshTokenExpirationMs;
+    }
+
+    private static SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(secretKeyString.getBytes(StandardCharsets.UTF_8));
+    }
 
     // Generate access token
     public static String generateAccessToken(Long userId) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 minutes
-                .signWith(SECRET_KEY)
+                .expiration(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
+                .signWith(getSecretKey())
                 .compact();
     }
 
@@ -32,8 +51,8 @@ public class JwtUtils {
         return Jwts.builder()
                 .claim("userId", userId)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 7 days
-                .signWith(SECRET_KEY)
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
+                .signWith(getSecretKey())
                 .compact();
     }
 
@@ -41,7 +60,7 @@ public class JwtUtils {
     public static boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .verifyWith(SECRET_KEY)
+                    .verifyWith(getSecretKey())
                     .build()
                     .parseSignedClaims(token);
             return true;
@@ -53,7 +72,7 @@ public class JwtUtils {
     // Extract user ID from token
     public static Long extractUserId(String token) {
         Claims claims = Jwts.parser()
-                .verifyWith(SECRET_KEY)
+                .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

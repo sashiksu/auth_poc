@@ -24,7 +24,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String token = authHeader.substring(7); // Remove "Bearer " prefix
+            // get pure token string removing Bearer prefix
+            String token = authHeader.substring(7);
 
             if (JwtUtils.validateToken(token)) {
                 Long userId = JwtUtils.extractUserId(token);

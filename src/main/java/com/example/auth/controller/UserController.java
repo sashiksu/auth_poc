@@ -36,7 +36,6 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<ApiResponse<SignInResponse>> signIn(@RequestBody SignInRequest signInPayload) {
         try {
-            // user details
             UserEntity user = userService.signIn(signInPayload);
 
             // generate access and refresh tokens

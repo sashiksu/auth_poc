@@ -15,7 +15,7 @@ public class RolesSeeder {
 
     public void seed() {
         List<RoleEntity> defaultRoles = List.of(
-                new RoleEntity(null, "SUPER_ADMIN"), // Role ID is generated, so null here
+                new RoleEntity(null, "SUPER_ADMIN"),
                 new RoleEntity(null, "ADMIN"),
                 new RoleEntity(null, "OWNER"),
                 new RoleEntity(null, "MANAGER"),
@@ -26,9 +26,7 @@ public class RolesSeeder {
         for (RoleEntity role : defaultRoles) {
             repository.findByName(role.getName())
                     .ifPresentOrElse(existing -> {
-                                // Role exists, do nothing (or log a message)
                             },
-                            // Role does not exist, so insert it
                             () -> repository.save(role));
         }
     }

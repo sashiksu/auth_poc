@@ -20,15 +20,14 @@ public class ProductService {
     private SecurityUtils securityUtils;
 
     public ProductEntity createProduct(ProductRequest productRequest) {
-        try{
+        try {
             String productName = productRequest.getName();
             BigDecimal productPrice = productRequest.getPrice();
             Long created_by = securityUtils.getCurrentUserId();
 
-            ProductEntity newProduct = new ProductEntity(productName,productPrice,created_by);
+            ProductEntity newProduct = new ProductEntity(productName, productPrice, created_by);
             return productRepository.save(newProduct);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Failed to create product: " + e.getMessage(), e);
         }
     }

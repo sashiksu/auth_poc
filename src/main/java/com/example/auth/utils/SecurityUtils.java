@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityUtils {
 
-
-
     public Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -18,8 +16,7 @@ public class SecurityUtils {
             throw new IllegalStateException("User not authenticated");
         }
 
-        if (authentication instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
             return jwtAuth.getUserId();
         } else {
             throw new IllegalStateException("Unexpected authentication type");

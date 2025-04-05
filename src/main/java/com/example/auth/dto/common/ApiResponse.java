@@ -10,19 +10,19 @@ public class ApiResponse<T> {
     private String error;
     private T data;
 
-    // Success response constructor
+    // success response constructor
     public ApiResponse(T data) {
         this.error = null;
         this.data = data;
     }
 
-    // Error response constructor
+    // error response constructor
     public ApiResponse(String error) {
         this.error = error;
         this.data = null;
     }
 
-    // Static factory methods for convenience
+    // static factory methods for convenience
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(data);
     }

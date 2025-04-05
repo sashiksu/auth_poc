@@ -10,7 +10,7 @@ import lombok.Setter;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,10 +42,10 @@ public class User {
     private Boolean isEnabled = true;
 
     // Constructors
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String username, String hashPassword, String firstName, String lastName) {
+    public UserEntity(String username, String hashPassword, String firstName, String lastName) {
         this.username = username;
         this.hashPassword = hashPassword;
         this.firstName = firstName;

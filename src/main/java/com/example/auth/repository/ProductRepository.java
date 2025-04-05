@@ -1,11 +1,10 @@
 package com.example.auth.repository;
 
-import com.example.auth.entity.UserEntity;
+import com.example.auth.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    UserEntity findByUsername(String username);
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 }

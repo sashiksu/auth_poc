@@ -4,7 +4,7 @@ import com.example.auth.dto.common.ApiResponse;
 import com.example.auth.dto.request.SignInRequest;
 import com.example.auth.dto.response.SignInResponse;
 import com.example.auth.dto.response.SignUpResponse;
-import com.example.auth.entity.User;
+import com.example.auth.entity.UserEntity;
 import com.example.auth.dto.request.SignUpRequest;
 import com.example.auth.service.UserService;
 import com.example.auth.utils.JwtUtils;
@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignUpResponse>> signUp(@RequestBody SignUpRequest signupPayload) {
         try {
-            User newUser = userService.signUp(signupPayload);
+            UserEntity newUser = userService.signUp(signupPayload);
             SignUpResponse signUpResponse = new SignUpResponse(newUser.getUsername());
             return ResponseEntity.ok(ApiResponse.success(signUpResponse));
         } catch (Exception e) {
@@ -37,7 +37,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<SignInResponse>> signIn(@RequestBody SignInRequest signInPayload) {
         try {
             // user details
-            User user = userService.signIn(signInPayload);
+            UserEntity user = userService.signIn(signInPayload);
 
             // generate access and refresh tokens
             String accessToken = JwtUtils.generateAccessToken(user.getUserId());

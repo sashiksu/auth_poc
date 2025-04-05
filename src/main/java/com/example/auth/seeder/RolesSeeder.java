@@ -1,6 +1,6 @@
 package com.example.auth.seeder;
 
-import com.example.auth.entity.Role;
+import com.example.auth.entity.RoleEntity;
 import com.example.auth.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,16 +14,16 @@ public class RolesSeeder {
     private RoleRepository repository;
 
     public void seed() {
-        List<Role> defaultRoles = List.of(
-                new Role(null, "SUPER_ADMIN"), // Role ID is generated, so null here
-                new Role(null, "ADMIN"),
-                new Role(null, "OWNER"),
-                new Role(null, "MANAGER"),
-                new Role(null, "CASHIER"),
-                new Role(null, "ACCOUNTANT")
+        List<RoleEntity> defaultRoles = List.of(
+                new RoleEntity(null, "SUPER_ADMIN"), // Role ID is generated, so null here
+                new RoleEntity(null, "ADMIN"),
+                new RoleEntity(null, "OWNER"),
+                new RoleEntity(null, "MANAGER"),
+                new RoleEntity(null, "CASHIER"),
+                new RoleEntity(null, "ACCOUNTANT")
         );
 
-        for (Role role : defaultRoles) {
+        for (RoleEntity role : defaultRoles) {
             repository.findByName(role.getName())
                     .ifPresentOrElse(existing -> {
                                 // Role exists, do nothing (or log a message)

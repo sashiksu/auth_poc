@@ -1,6 +1,7 @@
 package com.example.auth.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class ProductEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @JsonIgnore
     @Column(nullable = false)
     private Long created_by;
 

@@ -58,7 +58,7 @@ public class UserService {
                 throw new IllegalArgumentException("Invalid credentials provided try reset password.");
             }
 
-            return existingUser.get();
+            return user;
         } catch (Exception e) {
             throw new RuntimeException("Failed to signing user: " + e.getMessage(), e);
         }

@@ -1,5 +1,6 @@
 package com.example.auth.controller;
 
+import com.example.auth.config.jwt.AuthInfoInstance;
 import com.example.auth.dto.common.ApiResponse;
 import com.example.auth.dto.request.RefreshTokenRequest;
 import com.example.auth.dto.request.SignInRequest;
@@ -66,10 +67,10 @@ public class UserController {
             }
 
             // extract the user ID from the refresh token
-            Long userId = JwtUtils.extractUserId(refreshToken);
+            AuthInfoInstance authInfo = JwtUtils.extractAuthInfo(refreshToken);
 
             // Get the user from the repository
-            Optional<UserEntity> userOptional = userService.findById(userId);
+            Optional<UserEntity> userOptional = userService.findById(authInfo.getUserId());
             if (userOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(ApiResponse.error("User not found"));
@@ -77,8 +78,8 @@ public class UserController {
             UserEntity user = userOptional.get();
 
             // generate new tokens
-            String newAccessToken = JwtUtils.generateAccessToken(userId);
-            String newRefreshToken = JwtUtils.generateRefreshToken(userId);
+            String newAccessToken = JwtUtils.generateAccessToken(authInfo.getUserId());
+            String newRefreshToken = JwtUtils.generateRefreshToken(authInfo.getUserId());
 
             // Create and return the response
             RefreshTokenResponse response = new RefreshTokenResponse(newAccessToken, newRefreshToken, user.getUsername());

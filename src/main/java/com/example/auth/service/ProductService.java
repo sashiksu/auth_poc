@@ -1,5 +1,6 @@
 package com.example.auth.service;
 
+import com.example.auth.config.jwt.AuthInfoInstance;
 import com.example.auth.dto.request.ProductRequest;
 import com.example.auth.entity.ProductEntity;
 import com.example.auth.repository.ProductRepository;
@@ -23,9 +24,9 @@ public class ProductService {
         try {
             String productName = productRequest.getName();
             BigDecimal productPrice = productRequest.getPrice();
-            Long created_by = securityUtils.getCurrentUserId();
+            AuthInfoInstance authInfo = securityUtils.getCurrentUser();
 
-            ProductEntity newProduct = new ProductEntity(productName, productPrice, created_by);
+            ProductEntity newProduct = new ProductEntity(productName, productPrice, authInfo.getUserId());
             return productRepository.save(newProduct);
         } catch (Exception e) {
             throw new RuntimeException("Failed to create product: " + e.getMessage(), e);

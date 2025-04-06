@@ -1,4 +1,4 @@
-package com.example.auth.config;
+package com.example.auth.config.jwt;
 
 import com.example.auth.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
@@ -28,8 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
 
             if (JwtUtils.validateToken(token)) {
-                Long userId = JwtUtils.extractUserId(token);
-                JwtAuthenticationToken authentication = new JwtAuthenticationToken(userId);
+                AuthInfoInstance authInfoInstance = JwtUtils.extractAuthInfo(token);
+                JwtAuthenticationToken authentication = new JwtAuthenticationToken(authInfoInstance);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {

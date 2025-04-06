@@ -1,5 +1,6 @@
 package com.example.auth.utils;
 
+import com.example.auth.config.jwt.AuthInfoInstance;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -36,27 +37,31 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(secretKeyString.getBytes(StandardCharsets.UTF_8));
     }
 
-    // Generate access token
+    // generate access token
     public static String generateAccessToken(Long userId) {
         return Jwts.builder()
                 .claim("userId", userId)
+                .claim("parentId",123)
+                .claim("childId",321)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
                 .signWith(getSecretKey())
                 .compact();
     }
 
-    // Generate refresh token
+    // generate refresh token
     public static String generateRefreshToken(Long userId) {
         return Jwts.builder()
                 .claim("userId", userId)
+                .claim("parentId",123)
+                .claim("childId",321)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
                 .signWith(getSecretKey())
                 .compact();
     }
 
-    // Validate token
+    // validate token
     public static boolean validateToken(String token) {
         try {
             Jwts.parser()
@@ -69,13 +74,20 @@ public class JwtUtils {
         }
     }
 
-    // Extract user ID from token
-    public static Long extractUserId(String token) {
+    // extract auth info
+    public static AuthInfoInstance extractAuthInfo(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        return claims.get("userId", Long.class);
+
+        AuthInfoInstance authInfo = new AuthInfoInstance();
+        authInfo.setUserId(claims.get("userId", Long.class));
+        authInfo.setParentId(claims.get("parentId", Long.class));
+        authInfo.setChildId(claims.get("childId", Long.class));
+
+        return authInfo;
     }
+
 }

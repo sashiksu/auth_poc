@@ -1,4 +1,4 @@
-package com.example.auth.config;
+package com.example.auth.config.jwt;
 
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -6,11 +6,11 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 @Getter
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
-    private final Long userId;
+    private final AuthInfoInstance authInfo;
 
-    public JwtAuthenticationToken(Long userId) {
+    public JwtAuthenticationToken(AuthInfoInstance authInfo) {
         super(null); // no authorities yet
-        this.userId = userId;
+        this.authInfo = authInfo;
         setAuthenticated(true); // trust this token is valid once parsed
     }
 
@@ -21,6 +21,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return userId;
+        return authInfo;
     }
 }

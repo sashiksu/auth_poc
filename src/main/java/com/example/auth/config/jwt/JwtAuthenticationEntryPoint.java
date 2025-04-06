@@ -1,4 +1,4 @@
-package com.example.auth.config;
+package com.example.auth.config.jwt;
 
 import com.example.auth.dto.common.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
